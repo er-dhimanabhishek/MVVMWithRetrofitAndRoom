@@ -25,8 +25,8 @@ class ProductRepository(private val productService: ProductService,
                 productListLiveData.postValue(Response.Loading())
                 val result = productService.getProductList()
                 if (result.body() != null) {
-                    productDB.productDao().insertProductData(result.body()?.productsResponse?.toList()!!)
-                    productListLiveData.postValue(Response.Success(result.body()?.productsResponse?.toList()!!))
+                    productDB.productDao().insertProductData(result.body()?.toList()!!)
+                    productListLiveData.postValue(Response.Success(result.body()?.toList()!!))
                 }else{
                     productListLiveData.postValue(Response.Error("API error"))
                 }
