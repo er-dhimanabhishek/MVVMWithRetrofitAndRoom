@@ -2,13 +2,12 @@ package com.example.mvvmwithretrofitandroomexample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.mvvmwithretrofitandroomexample.databinding.ActivityMainBinding
-import com.example.mvvmwithretrofitandroomexample.model.Response
+import com.example.mvvmwithretrofitandroomexample.model.NetworkResult
 import com.example.mvvmwithretrofitandroomexample.viewmodel.ProductViewModel
 import com.example.mvvmwithretrofitandroomexample.viewmodel.ProductViewModelProviderFactory
 
@@ -25,16 +24,16 @@ class MainActivity : AppCompatActivity() {
         productViewModel.getProductList()
         productViewModel.productLiveDataObj.observe(this){ res ->
             when(res){
-                is Response.Loading -> {
+                is NetworkResult.Loading -> {
                     showProgressBar()
                 }
-                is Response.Success -> {
+                is NetworkResult.Success -> {
                     res.dataList?.get(0).let { item ->
                         _binding.product = item
                     }
                     hideProgressBar()
                 }
-                is Response.Error -> {
+                is NetworkResult.Error -> {
                     hideProgressBar()
                     Toast.makeText(this@MainActivity, res.errorMsg, Toast.LENGTH_LONG).show()
                 }

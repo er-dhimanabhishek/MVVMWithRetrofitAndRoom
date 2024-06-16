@@ -5,18 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mvvmwithretrofitandroomexample.model.ProductsResponseItem
-import com.example.mvvmwithretrofitandroomexample.model.Response
+import com.example.mvvmwithretrofitandroomexample.model.NetworkResult
 import com.example.mvvmwithretrofitandroomexample.repository.ProductRepository
 import kotlinx.coroutines.launch
 
 class ProductViewModel(private val productRepository: ProductRepository):  ViewModel(){
 
-    val productLiveDataObj: LiveData<Response<List<ProductsResponseItem>>>
-        get() = productRepository.productLiveDataObj
+    private val productListLiveData = MutableLiveData<NetworkResult<List<ProductsResponseItem>>>()
+
+    val productLiveDataObj: LiveData<NetworkResult<List<ProductsResponseItem>>>
+        get() = productListLiveData
 
     fun getProductList(){
+        productListLiveData.postValue(NetworkResult.Loading())
         viewModelScope.launch {
-            productRepository.getProductList()
+            productListLiveData.postValue(productRepository.getProductList())
         }
     }
 }
